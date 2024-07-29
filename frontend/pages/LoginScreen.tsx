@@ -1,9 +1,11 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../types';
+import { useAuth } from './../AuthContext';
+import axios from 'axios';
 
 type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 type LoginScreenRouteProp = RouteProp<RootStackParamList, 'Login'>;
@@ -14,19 +16,47 @@ type Props = {
 };
 
 const LoginScreen: React.FC<Props> = ({ navigation }) => {
-  const [email, setEmail] = React.useState('');
+  const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const { login } = useAuth();
 
-  const handleLogin = () => {
-    navigation.replace('Home');
+  const handleLogin = async () => {
+    try {
+      // Post request to the Django login endpoint
+      const response = await axios.post('http://localhost:8000/login/', {
+        username,
+        password
+      });
+  
+      // Check if response status is 200 (OK) before accessing data
+      if (response.status === 200) {
+        Alert.alert('Success', response.data.message || 'Login successful');
+        login(); // Update authentication state
+        navigation.navigate('Home'); // Navigate to the home screen
+      } else {
+        Alert.alert('Error', 'Unexpected response status');
+      }
+    } catch (error: any) {
+      // Handle HTTP errors
+      if (error.response) {
+        // Server responded with a status other than 2xx
+        Alert.alert('Error', error.response.data.error || 'An error occurred');
+      } else if (error.request) {
+        // No response was received from the server
+        Alert.alert('Error', 'No response from server');
+      } else {
+        // Something else happened during request setup
+        Alert.alert('Error', error.message || 'An error occurred');
+      }
+    }
   };
 
   return (
     <View style={styles.container}>
       <TextInput
-        label="Email"
-        value={email}
-        onChangeText={text => setEmail(text)}
+        label="Username"
+        value={username}
+        onChangeText={text => setUsername(text)}
         style={styles.input}
       />
       <TextInput
@@ -55,3 +85,4 @@ const styles = StyleSheet.create({
 });
 
 export default LoginScreen;
+

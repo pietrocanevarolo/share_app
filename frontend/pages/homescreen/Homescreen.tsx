@@ -21,7 +21,7 @@ const HomeScreen: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get('http://localhost:8000/items/');
+      const response = await axios.get('http://localhost:8000/api/item/');
       setItems(response.data);
     } catch (error: any) {
       setError(error.response?.data?.error || 'An error occurred');

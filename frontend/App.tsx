@@ -5,14 +5,14 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Provider as PaperProvider } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { RootStackParamList } from './types';
-
 import LoginScreen from './pages/LoginScreen';
-import HomeScreen from './pages/homescreen/Index';
 import FavoritesScreen from './pages/FavoritesScreen';
 import ShareScreen from './pages/ShareScreen';
 import MessagesScreen from './pages/MessagesScreen';
 import ReservedAreaScreen from './pages/ReservedAreaScreen';
 import { AuthProvider, useAuth } from './AuthContext';
+import HomeScreen from './pages/homescreen/Homescreen';
+
 
 const Tab = createBottomTabNavigator<RootStackParamList>();
 const Stack = createStackNavigator<RootStackParamList>();

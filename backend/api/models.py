@@ -27,6 +27,13 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+    
+class Category(models.Model):
+    name = models.CharField(max_length=255)
+    parent = models.ForeignKey('self', related_name='subcategories', on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
 
 class Item(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -35,6 +42,8 @@ class Item(models.Model):
     is_shared = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    category = models.ForeignKey(Category, related_name='items', on_delete=models.CASCADE)
+
 
     def __str__(self):
         return self.name
@@ -46,3 +55,5 @@ class ItemImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.item.name} uploaded at {self.uploaded_at}"
+
+

@@ -7,7 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { RootStackParamList } from './types';
 
 import LoginScreen from './pages/LoginScreen';
-import HomeScreen from './pages/HomeScreen';
+import HomeScreen from './pages/homescreen/Index';
 import FavoritesScreen from './pages/FavoritesScreen';
 import ShareScreen from './pages/ShareScreen';
 import MessagesScreen from './pages/MessagesScreen';

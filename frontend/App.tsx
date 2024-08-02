@@ -12,7 +12,7 @@ import MessagesScreen from './pages/MessagesScreen';
 import ReservedAreaScreen from './pages/ReservedAreaScreen';
 import { AuthProvider, useAuth } from './AuthContext';
 import HomeScreen from './pages/homescreen/Homescreen';
-
+import SubHomescreen from './pages/homescreen/SubHomescreen';
 
 const Tab = createBottomTabNavigator<RootStackParamList>();
 const Stack = createStackNavigator<RootStackParamList>();
@@ -56,7 +56,10 @@ const AppNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {isLoggedIn ? (
-        <Stack.Screen name="AppTabs" component={AppTabs} />
+        <>
+          <Stack.Screen name="AppTabs" component={AppTabs} />
+          <Stack.Screen name="SubHomescreen" component={SubHomescreen} /> 
+        </>
       ) : (
         <Stack.Screen name="Login" component={LoginScreen} />
       )}

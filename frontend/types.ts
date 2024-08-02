@@ -6,4 +6,5 @@ export type RootStackParamList = {
     Share: undefined;
     Messages: undefined;
     ReservedArea: undefined;
+    SubHomescreen: { categoryId: number };
   };

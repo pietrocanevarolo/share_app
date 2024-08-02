@@ -124,7 +124,8 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   subCategoryList: {
-    marginBottom: 16,
+    marginTop: 30,
+    marginBottom: 36,
   },
   subCategoryItem: {
     alignItems: 'center',

@@ -3,16 +3,16 @@ import { View, Text, StyleSheet } from 'react-native';
 import { Card } from 'react-native-paper';
 
 type ItemProps = {
-  title: string;
+  name: string;
   description: string;
   imageUrl: string;
 };
 
-const Item: React.FC<ItemProps> = ({ title, description, imageUrl }) => {
+const Item: React.FC<ItemProps> = ({ name, description, imageUrl }) => {
   return (
     <Card style={styles.card}>
       <Card.Cover source={{ uri: imageUrl }} />
-      <Card.Title title={title} />
+      <Card.Title title={name} />
       <Card.Content>
         <Text>{description}</Text>
       </Card.Content>

@@ -9,14 +9,6 @@ import Item from './item';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 
-
-type ItemType = {
-  id: number;
-  title: string;
-  description: string;
-  imageUrl: string;
-};
-
 type CategoryType = {
   id: number;
   name: string;
@@ -25,25 +17,11 @@ type CategoryType = {
 
 const HomeScreen: React.FC = () => {
   const [searchQuery, setSearchQuery] = React.useState('');
-  const [items, setItems] = React.useState<ItemType[]>([]);
   const [categories, setCategories] = React.useState<CategoryType[]>([]);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
   const navigation = useNavigation<HomeScreenNavigationProp>();
-
-  const fetchItems = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await axios.get('http://localhost:8000/api/item/');
-      setItems(response.data);
-    } catch (error: any) {
-      setError(error.response?.data?.error || 'An error occurred');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const fetchCategories = async () => {
     setLoading(true);
@@ -59,7 +37,6 @@ const HomeScreen: React.FC = () => {
   };
 
   React.useEffect(() => {
-    fetchItems();
     fetchCategories();
   }, []);
 
@@ -87,7 +64,7 @@ const HomeScreen: React.FC = () => {
         onChangeText={text => setSearchQuery(text)}
         style={styles.input}
       />
-      <Button mode="contained" onPress={fetchItems} style={styles.button}>
+      <Button mode="contained" style={styles.button}>
         Search Categories
       </Button>
       {loading && <ActivityIndicator animating={true} />}

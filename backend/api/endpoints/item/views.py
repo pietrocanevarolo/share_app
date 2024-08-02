@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 
 from api.serializers import ItemSerializer
-from api.models import Item
+from api.models import Item,Category
 from django.utils import timezone
 
 
@@ -25,6 +25,20 @@ class ItemListAPIView(generics.ListCreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get_queryset(self):
+        
         queryset = Item.objects.all()
+        category_id = self.request.query_params.get('category_id')
+        sub_category_id = self.request.query_params.get('sub_category_id')
+
+        print(category_id)
+        print(sub_category_id)
+        if sub_category_id:
+            return  queryset.filter(category=sub_category_id)
+        
+        elif category_id and not sub_category_id:
+            sub_categories=Category.objects.filter(parent=category_id)
+            sub_category_ids = sub_categories.values_list('id', flat=True)
+
+            return  queryset.filter(category__in=sub_category_ids)
 
         return queryset

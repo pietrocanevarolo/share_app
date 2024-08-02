@@ -10,13 +10,12 @@ import Item from './item';
 type SubHomescreenRouteProp = RouteProp<RootStackParamList, 'SubHomescreen'>;
 type SubHomescreenNavigationProp = StackNavigationProp<RootStackParamList, 'SubHomescreen'>;
 
-
-
 type ItemType = {
   id: number;
-  title: string;
+  name: string;
   description: string;
   imageUrl: string;
+  category:number;
 };
 
 type CategoryType = {
@@ -39,7 +38,7 @@ const SubHomescreen: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`http://localhost:8000/api/categories/?parent=${categoryId}`);
+      const response = await axios.get(`http://localhost:8000/api/categories/?category_id=${categoryId}`);
       setSubCategories(response.data);
     } catch (error: any) {
       setError(error.response?.data?.error || 'An error occurred');
@@ -51,8 +50,20 @@ const SubHomescreen: React.FC = () => {
   const fetchItems = async () => {
     setLoading(true);
     setError(null);
+    
+    // Build query parameters based on the presence of values
+    const queryParams = new URLSearchParams();
+    
+    // Convert numbers to strings before appending
+    if (selectedSubCategory !== null && selectedSubCategory !== undefined) {
+      queryParams.append('sub_category_id', String(selectedSubCategory));
+    }
+    if (categoryId !== null && categoryId !== undefined) {
+      queryParams.append('category_id', String(categoryId));
+    }
+    
     try {
-      const response = await axios.get(`http://localhost:8000/api/item/?category=${selectedSubCategory || categoryId}`);
+      const response = await axios.get(`http://localhost:8000/api/item/?${queryParams.toString()}`);
       setItems(response.data);
     } catch (error: any) {
       setError(error.response?.data?.error || 'An error occurred');
@@ -96,7 +107,7 @@ const SubHomescreen: React.FC = () => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <Item
-            title={item.title}
+            name={item.name}
             description={item.description}
             imageUrl={item.imageUrl}
           />

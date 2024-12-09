@@ -5,22 +5,27 @@ import axios from 'axios';
 const MessagesScreen: React.FC = ({ navigation }: any) => {
   const [chats, setChats] = useState<any[]>([]); // Stato per memorizzare le chat
   const [loading, setLoading] = useState<boolean>(true); // Stato per la gestione del loading
+  const [refreshing, setRefreshing] = useState<boolean>(false); // Stato per il refresh
 
-  useEffect(() => {
-    // Funzione per recuperare le chat dal backend
-    const fetchChats = async () => {
-      try {
-        const response = await axios.get('http://localhost:8000/api/chat/');
-        setChats(response.data); // Salva i dati delle chat
-      } catch (error) {
-        console.error('Error fetching chats:', error);
-      } finally {
-        setLoading(false); // Imposta loading a false quando i dati sono stati caricati
-      }
-    };
+  // Funzione per recuperare le chat dal backend
+  const fetchChats = async () => {
+    try {
+      setLoading(true); // Imposta loading a true all'inizio del caricamento
+      const response = await axios.get('http://localhost:8000/api/chat/');
+      setChats(response.data); // Salva i dati delle chat
+    } catch (error) {
+      console.error('Error fetching chats:', error);
+    } finally {
+      setLoading(false); // Imposta loading a false quando i dati sono stati caricati
+    }
+  };
 
-    fetchChats();
-  }, []);
+  // Funzione di refresh chiamata quando l'utente tira verso il basso
+  const onRefresh = async () => {
+    setRefreshing(true); // Mostra il loading mentre si ricaricano i dati
+    await fetchChats(); // Recupera le chat
+    setRefreshing(false); // Nasconde il loading dopo aver finito il recupero
+  };
 
   // Funzione per creare una nuova chat
   const createChat = async () => {
@@ -51,6 +56,11 @@ const MessagesScreen: React.FC = ({ navigation }: any) => {
     </TouchableOpacity>
   );
 
+  // Effettua il recupero delle chat quando la pagina viene caricata
+  useEffect(() => {
+    fetchChats();
+  }, []);
+
   // Se i dati sono in caricamento, mostra un indicatore di caricamento
   if (loading) {
     return (
@@ -67,6 +77,8 @@ const MessagesScreen: React.FC = ({ navigation }: any) => {
         data={chats}
         renderItem={renderChat}
         keyExtractor={(item) => item.id.toString()}
+        refreshing={refreshing} // Mostra il loading quando il refresh è attivo
+        onRefresh={onRefresh} // Funzione di refresh
       />
     </View>
   );

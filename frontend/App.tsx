@@ -76,7 +76,7 @@ const AppNavigator = () => {
         <>
           <Stack.Screen name="AppTabs" component={AppTabs} />
           <Stack.Screen name="SubHomescreen" component={SubHomescreen} /> 
-
+          <Stack.Screen name="Chat" component={ChatScreen} /> 
         </>
       ) : (
         <Stack.Screen name="Login" component={LoginScreen} />

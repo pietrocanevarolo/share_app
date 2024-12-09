@@ -1,26 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, Button, Alert } from 'react-native';
 import axios from 'axios';
 
 const MessagesScreen: React.FC = ({ navigation }: any) => {
-  const [chats, setChats] = useState<any[]>([]);  // Stato per memorizzare le chat
-  const [loading, setLoading] = useState<boolean>(true);  // Stato per la gestione del loading
+  const [chats, setChats] = useState<any[]>([]); // Stato per memorizzare le chat
+  const [loading, setLoading] = useState<boolean>(true); // Stato per la gestione del loading
 
   useEffect(() => {
     // Funzione per recuperare le chat dal backend
     const fetchChats = async () => {
       try {
-        const response = await axios.get('http://your-backend-url/api/chats/');  // Sostituisci con l'URL del tuo backend
-        setChats(response.data);  // Salva i dati delle chat
+        const response = await axios.get('http://localhost:8000/api/chat/');
+        setChats(response.data); // Salva i dati delle chat
       } catch (error) {
         console.error('Error fetching chats:', error);
       } finally {
-        setLoading(false);  // Imposta loading a false quando i dati sono stati caricati
+        setLoading(false); // Imposta loading a false quando i dati sono stati caricati
       }
     };
 
     fetchChats();
   }, []);
+
+  // Funzione per creare una nuova chat
+  const createChat = async () => {
+    try {
+      const response = await axios.post('http://localhost:8000/api/chat/', {
+        item: 1, // Sostituisci con un valore reale o lascia che l'utente scelga
+        users: [2, 3], // Sostituisci con una lista di utenti
+      });
+      Alert.alert('Success', 'Chat created successfully!');
+      setChats([...chats, response.data]); // Aggiungi la nuova chat all'elenco
+    } catch (error) {
+      console.error('Error creating chat:', error);
+      Alert.alert('Error', 'Failed to create chat.');
+    }
+  };
 
   // Funzione per rendere ogni singola chat
   const renderChat = ({ item }: { item: any }) => (
@@ -47,6 +62,7 @@ const MessagesScreen: React.FC = ({ navigation }: any) => {
 
   return (
     <View style={styles.container}>
+      <Button title="Create New Chat" onPress={createChat} />
       <FlatList
         data={chats}
         renderItem={renderChat}

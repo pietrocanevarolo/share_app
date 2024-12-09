@@ -22,30 +22,26 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
   const handleLogin = async () => {
     try {
-      // Post request to the Django login endpoint
-      const response = await axios.post('http://localhost:8000/login/', {
+      const response = await axios.post('http://localhost:8000/api/token/', {
         username,
-        password
+        password,
       });
   
-      // Check if response status is 200 (OK) before accessing data
       if (response.status === 200) {
-        Alert.alert('Success', response.data.message || 'Login successful');
-        login(); // Update authentication state
-        navigation.navigate('Home'); // Navigate to the home screen
-      } else {
-        Alert.alert('Error', 'Unexpected response status');
+        const { access, refresh } = response.data;
+  
+        // Usa il metodo login dal contesto
+        await login(access, refresh);
+  
+        Alert.alert('Success', 'Login successful');
+        navigation.navigate('Home');
       }
     } catch (error: any) {
-      // Handle HTTP errors
       if (error.response) {
-        // Server responded with a status other than 2xx
-        Alert.alert('Error', error.response.data.error || 'An error occurred');
+        Alert.alert('Error', error.response.data.detail || 'Invalid credentials');
       } else if (error.request) {
-        // No response was received from the server
         Alert.alert('Error', 'No response from server');
       } else {
-        // Something else happened during request setup
         Alert.alert('Error', error.message || 'An error occurred');
       }
     }

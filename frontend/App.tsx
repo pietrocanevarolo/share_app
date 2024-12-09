@@ -4,6 +4,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Provider as PaperProvider } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RootStackParamList } from './types';
 import LoginScreen from './pages/LoginScreen';
 import FavoritesScreen from './pages/FavoritesScreen';
@@ -13,6 +15,18 @@ import ReservedAreaScreen from './pages/ReservedAreaScreen';
 import { AuthProvider, useAuth } from './AuthContext';
 import HomeScreen from './pages/homescreen/Homescreen';
 import SubHomescreen from './pages/homescreen/SubHomescreen';
+
+// Configurazione dell'intercettazione globale di Axios
+axios.interceptors.request.use(
+  async (config) => {
+    const accessToken = await AsyncStorage.getItem('accessToken');
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 const Tab = createBottomTabNavigator<RootStackParamList>();
 const Stack = createStackNavigator<RootStackParamList>();

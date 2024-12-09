@@ -11,7 +11,7 @@ const ChatScreen: React.FC = ({ route }: any) => {
     // Funzione per recuperare i messaggi dal backend
     const fetchMessages = async () => {
       try {
-        const response = await axios.get(`http://your-backend-url/api/messages/${chatId}/`);  // Sostituisci con l'URL del tuo backend
+        const response = await axios.get(`http://localhost:8000/api/chat/${chatId}/`);  // Sostituisci con l'URL del tuo backend
         setMessages(response.data);  // Salva i messaggi
       } catch (error) {
         console.error('Error fetching messages:', error);
@@ -26,7 +26,7 @@ const ChatScreen: React.FC = ({ route }: any) => {
     if (newMessage.trim() === '') return;  // Non inviare messaggi vuoti
 
     try {
-      const response = await axios.post('http://your-backend-url/api/messages/', {
+      const response = await axios.post('http://localhost:8000/api/message/', {
         chatId,
         message: newMessage,
       });

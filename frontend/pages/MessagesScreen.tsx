@@ -26,8 +26,8 @@ const MessagesScreen: React.FC = ({ navigation }: any) => {
   const createChat = async () => {
     try {
       const response = await axios.post('http://localhost:8000/api/chat/', {
-        item: 1, // Sostituisci con un valore reale o lascia che l'utente scelga
-        users: [2, 3], // Sostituisci con una lista di utenti
+        item: 13, // Sostituisci con un valore reale o lascia che l'utente scelga
+        users: [3, 9], 
       });
       Alert.alert('Success', 'Chat created successfully!');
       setChats([...chats, response.data]); // Aggiungi la nuova chat all'elenco

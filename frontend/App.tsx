@@ -15,6 +15,8 @@ import ReservedAreaScreen from './pages/ReservedAreaScreen';
 import { AuthProvider, useAuth } from './AuthContext';
 import HomeScreen from './pages/homescreen/Homescreen';
 import SubHomescreen from './pages/homescreen/SubHomescreen';
+import ChatScreen from './pages/ChatScreen';
+
 
 // Configurazione dell'intercettazione globale di Axios
 axios.interceptors.request.use(
@@ -61,6 +63,7 @@ const AppTabs = () => (
     <Tab.Screen name="Share" component={ShareScreen} />
     <Tab.Screen name="Messages" component={MessagesScreen} />
     <Tab.Screen name="ReservedArea" component={ReservedAreaScreen} />
+
   </Tab.Navigator>
 );
 
@@ -73,6 +76,7 @@ const AppNavigator = () => {
         <>
           <Stack.Screen name="AppTabs" component={AppTabs} />
           <Stack.Screen name="SubHomescreen" component={SubHomescreen} /> 
+
         </>
       ) : (
         <Stack.Screen name="Login" component={LoginScreen} />
